@@ -3,10 +3,14 @@ from odoo.exceptions import UserError
 import base64
 from io import BytesIO
 from openpyxl import load_workbook
-
+import base64
+import csv
+from io import StringIO
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
+
+    mobile = fields.Char(string="Mobile")
 
     category_import_file = fields.Binary(
         string="Import Categories (Excel)",
@@ -74,5 +78,42 @@ class ResPartner(models.Model):
                 "title": _("Import Completed"),
                 "message": _("Updated: %s\nSkipped: %s") % (updated, skipped),
                 "type": "success",
+            }
+        }
+
+    def update_partners_from_csv(self):
+        if not self.category_import_filename:
+            return
+
+        # Decode the uploaded file
+        file_data = base64.b64decode(self.category_import_filename)
+        csv_data = StringIO(file_data.decode('utf-8'))
+        reader = csv.DictReader(csv_data)
+
+        updated_count = 0
+        for row in reader:
+            name = row.get('name')
+            mobile = row.get('mobile')
+            phone = row.get('phone')
+
+            if not name:
+                continue
+
+            # Search partner by name
+            partner = self.env['res.partner'].search([('name', '=', name)], limit=1)
+            if partner:
+                partner.write({
+                    'mobile': mobile or False,
+                    'phone': phone or False,
+                })
+                updated_count += 1
+
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'Update Completed',
+                'message': f'{updated_count} partners updated',
+                'sticky': False,
             }
         }
