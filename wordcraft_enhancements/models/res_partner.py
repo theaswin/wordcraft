@@ -6,46 +6,49 @@ from openpyxl import load_workbook
 
 
 class ResPartner(models.Model):
-    _inherit = 'res.partner'
+    _inherit = "res.partner"
 
-    category_import_file = fields.Binary(string="Import Categories (Excel)")
-    category_import_filename = fields.Char()
+    category_import_file = fields.Binary(
+        string="Import Categories (Excel)",
+        help="XLSX columns: name, mobile, category_name"
+    )
+    category_import_filename = fields.Char(string="Filename")
 
     def action_import_partner_categories(self):
         if not self.category_import_file:
-            raise UserError(_("Please upload an Excel file."))
+            raise UserError(_("Please upload an Excel file first."))
 
-        wb = load_workbook(
-            filename=BytesIO(base64.b64decode(self.category_import_file))
-        )
-        sheet = wb.active
+        file_data = base64.b64decode(self.category_import_file)
+        workbook = load_workbook(filename=BytesIO(file_data))
+        sheet = workbook.active
 
-        Partner = self.env['res.partner']
-        Category = self.env['res.partner.category']
+        Partner = self.env["res.partner"]
+        Category = self.env["res.partner.category"]
 
         updated = 0
         skipped = 0
 
         for row in sheet.iter_rows(min_row=2, values_only=True):
-            name, mobile, phone, category_name = row
+            # ✅ SAFE column access (ignores extra columns)
+            name = row[0]
+            mobile = row[1]
+            category_name = row[2]
 
             if not name or not category_name:
                 skipped += 1
                 continue
 
-            # 🔍 Partner search
             partner = Partner.search([
-                ('name', '=', name),
-                ('active', '=', True)
+                ("name", "=", name),
+                ("active", "=", True)
             ], limit=1)
 
             if not partner:
                 skipped += 1
                 continue
 
-            # 🔍 Category search
             category = Category.search([
-                ('name', '=', category_name)
+                ("name", "=", category_name)
             ], limit=1)
 
             if not category:
@@ -54,22 +57,22 @@ class ResPartner(models.Model):
 
             vals = {}
 
-            # 📞 Copy Excel mobile → partner.phone
+            # mobile → phone
             if mobile:
-                vals['phone'] = str(mobile)
+                vals["phone"] = str(mobile)
 
-            # 🏷 Add category safely
-            vals['category_id'] = [(4, category.id)]
+            # add category (M2M safe)
+            vals["category_id"] = [(4, category.id)]
 
             partner.write(vals)
             updated += 1
 
         return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': _("Import Completed"),
-                'message': _("Updated: %s\nSkipped: %s") % (updated, skipped),
-                'type': 'success',
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": _("Import Completed"),
+                "message": _("Updated: %s\nSkipped: %s") % (updated, skipped),
+                "type": "success",
             }
         }
