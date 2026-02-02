@@ -1,0 +1,21 @@
+<odoo>
+    <record id="view_partner_form_inherit_category_import" model="ir.ui.view">
+        <field name="name">res.partner.form.import.category</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Add file upload after category field -->
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="category_import_file" filename="category_import_filename"/>
+                <button
+                    name="action_import_partner_categories"
+                    type="object"
+                    string="Import Categories from Excel"
+                    class="btn-primary"
+                    icon="fa-upload"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
