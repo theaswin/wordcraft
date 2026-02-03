@@ -6,11 +6,12 @@ from openpyxl import load_workbook
 import base64
 import csv
 from io import StringIO
-
+import openpyxl
+import io
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    # mobile = fields.Char(string="Mobile")
+    mobile = fields.Char(string="Mobile")
 
     category_import_file = fields.Binary(
         string="Import Categories (Excel)",
@@ -18,58 +19,43 @@ class ResPartner(models.Model):
     )
     category_import_filename = fields.Char(string="Filename")
 
-    def action_import_partner_categories(self):
+    def action_import_phone_from_excel(self):
+        self.ensure_one()
+
         if not self.category_import_file:
-            raise UserError(_("Please upload an Excel file first."))
+            raise ValueError(_("Please upload an Excel file."))
 
-        file_data = base64.b64decode(self.category_import_file)
-        workbook = load_workbook(filename=BytesIO(file_data))
+        data = base64.b64decode(self.category_import_file)
+        workbook = openpyxl.load_workbook(io.BytesIO(data))
         sheet = workbook.active
-
-        Partner = self.env["res.partner"]
-        Category = self.env["res.partner.category"]
 
         updated = 0
         skipped = 0
+        max_rows = 1000
+        processed = 0
 
+        Partner = self.env['res.partner']
+
+        # Expected headers: name | mobile
         for row in sheet.iter_rows(min_row=2, values_only=True):
-            # ✅ SAFE column access (ignores extra columns)
-            name = row[0]
-            mobile = row[1]
-            category_name = row[2]
+            if processed >= max_rows:
+                break
 
-            if not name or not category_name:
+            processed += 1
+            print("========================",row)
+            name, mobile = row[0],row[1]
+
+            if not name or not mobile:
                 skipped += 1
                 continue
 
-            partner = Partner.search([
-                ("name", "=", name),
-                ("active", "=", True)
-            ], limit=1)
+            partner = Partner.search([('name', '=', name),('phone','=',False)])
 
-            if not partner:
+            if partner:
+                partner.phone = str(mobile)
+                updated += 1
+            else:
                 skipped += 1
-                continue
-
-            category = Category.search([
-                ("name", "=", category_name)
-            ], limit=1)
-
-            if not category:
-                skipped += 1
-                continue
-
-            vals = {}
-
-            # mobile → phone
-            if mobile:
-                vals["phone"] = str(mobile)
-
-            # add category (M2M safe)
-            vals["category_id"] = [(4, category.id)]
-
-            partner.write(vals)
-            updated += 1
 
         return {
             "type": "ir.actions.client",
@@ -78,42 +64,5 @@ class ResPartner(models.Model):
                 "title": _("Import Completed"),
                 "message": _("Updated: %s\nSkipped: %s") % (updated, skipped),
                 "type": "success",
-            }
-        }
-
-    def update_partners_from_csv(self):
-        if not self.category_import_filename:
-            return
-
-        # Decode the uploaded file
-        file_data = base64.b64decode(self.category_import_filename)
-        csv_data = StringIO(file_data.decode('utf-8'))
-        reader = csv.DictReader(csv_data)
-
-        updated_count = 0
-        for row in reader:
-            name = row.get('name')
-            mobile = row.get('mobile')
-            phone = row.get('phone')
-
-            if not name:
-                continue
-
-            # Search partner by name
-            partner = self.env['res.partner'].search([('name', '=', name)], limit=1)
-            if partner:
-                partner.write({
-                    'mobile': mobile or False,
-                    'phone': phone or False,
-                })
-                updated_count += 1
-
-        return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': 'Update Completed',
-                'message': f'{updated_count} partners updated',
-                'sticky': False,
             }
         }

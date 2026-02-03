@@ -33,7 +33,7 @@
     'maintainer': 'WordCraft',
     'support': 'WordCraft',
     'license': 'LGPL-3',
-    'depends': ['account'],
+    'depends': ['account','contacts'],
     'data': [
         'views/res_partner_view.xml',
         ],
