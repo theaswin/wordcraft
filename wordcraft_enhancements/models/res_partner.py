@@ -10,7 +10,7 @@ from io import StringIO
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    mobile = fields.Char(string="Mobile")
+    # mobile = fields.Char(string="Mobile")
 
     category_import_file = fields.Binary(
         string="Import Categories (Excel)",
