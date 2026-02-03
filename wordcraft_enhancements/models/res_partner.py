@@ -19,7 +19,7 @@ class ResPartner(models.Model):
     )
     category_import_filename = fields.Char(string="Filename")
 
-    def action_import_phone_from_excel(self):
+    def action_import_partner_categories(self):
         self.ensure_one()
 
         if not self.category_import_file:
