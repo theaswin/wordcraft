@@ -1,4 +1,4 @@
-from odoo import models, fields, _
+from odoo import models, fields, _ , api
 from odoo.exceptions import UserError
 import base64
 from io import BytesIO
@@ -11,13 +11,56 @@ import io
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    # mobile = fields.Char(string="Mobile")
+    mobile = fields.Char(string="Mobile")
+    google_map_url = fields.Char(string="Google Map")
 
     category_import_file = fields.Binary(
         string="Import Categories (Excel)",
         help="XLSX columns: name, mobile, category_name"
     )
     category_import_filename = fields.Char(string="Filename")
+    due_invoice_count = fields.Integer(
+        string="Due Invoice Count",
+        compute="_compute_due_invoice_count",
+        store=False
+    )
+
+    @api.depends('invoice_ids')
+    def _compute_due_invoice_count(self):
+        Move = self.env['account.move']
+        for rec in self:
+            rec.due_invoice_count = Move.search_count([
+                ('partner_id', '=', rec.id),
+                ('move_type', '=', 'out_invoice'),
+                ('state', '=', 'posted'),
+                ('amount_residual', '>', 0),
+            ])
+
+
+    def action_view_due_statement(self):
+        self.ensure_one()
+
+        invoices = self.env['account.move'].sudo().search([
+            ('partner_id', '=', self.id),
+            ('move_type', '=', 'out_invoice'),
+            ('state', '=', 'posted'),
+            ('amount_residual', '>', 0),
+        ])
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Due Invoices',
+            'res_model': 'account.move',
+            'domain': [('id', 'in', invoices.ids)],
+            'view_mode': 'list,form',
+            'target': 'current',
+            'context': {
+                'default_partner_id': self.id,
+            },
+        }
+    
+
+
 
     def action_import_partner_categories(self):
         self.ensure_one()
