@@ -13,7 +13,7 @@
             	</xpath>
 
               <xpath expr="//field[@name='order_line']/list/field[@name='name']" position="after">
-                <field name="deadline"/>
+                <field name="deadline" required="1"/>
               </xpath>
               
             </field>

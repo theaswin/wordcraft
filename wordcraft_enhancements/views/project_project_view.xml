@@ -9,6 +9,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='date_start']" position="after">
             		<field name="deadline_hrs" required="1"/>
+                    <field name="sale_prd_names" invisible="1"/>
             	</xpath>
             </field>
     </record>
@@ -22,11 +23,22 @@
             <!-- 1️⃣ Load the field into kanban -->
             <xpath expr="//kanban" position="inside">
                 <field name="deadline_hrs"/>
+                <field name="sale_prd_names"/>
             </xpath>
 
             <!-- 2️⃣ Show deadline hours below date range -->
             <xpath expr="//div[@t-if='record.date.raw_value or record.date_start.raw_value']"
                   position="after">
+                  <!-- =================================================================== -->
+                <div t-if="record.sale_prd_names.raw_value"
+                    class="text-muted d-flex align-items-baseline">
+                    <span class="fa fa-cube me-2" title="Products"/>
+                    <span>
+                        <field name="sale_prd_names"/>
+                    </span>
+                </div>
+
+                  <!-- =================================================================== -->
                 <div t-if="record.deadline_hrs.raw_value"
                     class="text-muted d-flex align-items-baseline">
                     <span class="fa fa-hourglass-half me-2"
