@@ -6,6 +6,23 @@ class SaleOrder(models.Model):
 
     confirmed_time = fields.Datetime(string="Confirmed Time", copy=False)
     deadline = fields.Datetime(string="Deadline",copy=False)
+    x_external_so_id = fields.Integer(
+        string="External Sale Order ID",
+        index=True,
+        copy=False
+    )
+
+    def action_confirm(self):
+        res = super().action_confirm()
+
+        now = fields.Datetime.now()
+        for order in self:
+            # set only once
+            if not order.confirmed_time:
+                order.confirmed_time = now
+
+        return res
+
 
 
 
@@ -14,3 +31,8 @@ class SaleOrderLine(models.Model):
 
     confirmed_time = fields.Datetime(string="Confirmed Time", copy=False)
     deadline = fields.Datetime(string="Deadline",copy=False)
+    x_external_sol_id = fields.Integer(
+        string="External Sale Order Line ID",
+        index=True,
+        copy=False
+    )

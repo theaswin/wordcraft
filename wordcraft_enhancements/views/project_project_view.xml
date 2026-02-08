@@ -2,55 +2,69 @@
 <odoo>
 
 
-	  <record id="view_prj_word_form" model="ir.ui.view">
-            <field name="name">sale.order.form.view</field>
-            <field name="model">project.project</field>
-            <field name="inherit_id" ref="project.edit_project"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='date_start']" position="after">
-            		<field name="deadline_hrs" required="1"/>
-                    <field name="sale_prd_names" invisible="1"/>
-            	</xpath>
-            </field>
-    </record>
+    
 
-    <record id="view_project_kanban_deadline_hrs" model="ir.ui.view">
-        <field name="name">project.project.kanban.deadline.hrs</field>
-        <field name="model">project.project</field>
-        <field name="inherit_id" ref="project.view_project_kanban"/>
-        <field name="arch" type="xml">
+<record id="view_project_kanban_deadline_hrs" model="ir.ui.view">
+    <field name="name">project.project.kanban.deadline.hrs</field>
+    <field name="model">project.project</field>
+    <field name="inherit_id" ref="project.view_project_kanban"/>
+    <field name="arch" type="xml">
 
-            <!-- 1️⃣ Load the field into kanban -->
-            <xpath expr="//kanban" position="inside">
-                <field name="deadline_hrs"/>
-                <field name="sale_prd_names"/>
-            </xpath>
+        <!-- 1️⃣ Load fields into kanban -->
+        <xpath expr="//kanban" position="inside">
+            <field name="deadline_hrs"/>
+            <field name="sale_prd_names"/>
+            <field name="color_number"/>
+        </xpath>
 
-            <!-- 2️⃣ Show deadline hours below date range -->
-            <xpath expr="//div[@t-if='record.date.raw_value or record.date_start.raw_value']"
-                  position="after">
-                  <!-- =================================================================== -->
-                <div t-if="record.sale_prd_names.raw_value"
-                    class="text-muted d-flex align-items-baseline">
-                    <span class="fa fa-cube me-2" title="Products"/>
-                    <span>
-                        <field name="sale_prd_names"/>
-                    </span>
-                </div>
+        <!-- 2️⃣ Show below date -->
+        <xpath expr="//div[@t-if='record.date.raw_value or record.date_start.raw_value']"
+               position="after">
 
-                  <!-- =================================================================== -->
-                <div t-if="record.deadline_hrs.raw_value"
-                    class="text-muted d-flex align-items-baseline">
-                    <span class="fa fa-hourglass-half me-2"
-                          title="Remaining Time"/>
+            <!-- Product names -->
+            <div t-if="record.sale_prd_names and record.sale_prd_names.raw_value"
+                 class="text-muted d-flex align-items-baseline">
+                <span class="fa fa-cube me-2" title="Products"/>
+                <span>
+                    <field name="sale_prd_names"/>
+                </span>
+            </div>
+
+            <!-- Remaining time -->
+            <t t-if="record.deadline_hrs and record.deadline_hrs.raw_value">
+
+                <!-- 🔴 RED (< 30%) -->
+                <div t-if="record.color_number.raw_value &gt; 30"
+                     class="d-flex align-items-baseline text-danger fw-bold">
+                    <span class="fa fa-hourglass-half me-2"/>
                     <span>
                         <field name="deadline_hrs"/> hrs remaining
                     </span>
                 </div>
-            </xpath>
 
-        </field>
-    </record>
+                <!-- 🟡 YELLOW (30–50%) -->
+                <div t-elif="record.color_number.raw_value &gt;= 50"
+                     class="d-flex align-items-baseline text-warning fw-bold">
+                    <span class="fa fa-hourglass-half me-2"/>
+                    <span>
+                        <field name="deadline_hrs"/> hrs remaining
+                    </span>
+                </div>
+
+                <!-- 🟢 GREEN (> 50%) -->
+                <div t-else=""
+                     class="d-flex align-items-baseline text-success fw-bold">
+                    <span class="fa fa-hourglass-half me-2"/>
+                    <span>
+                        <field name="deadline_hrs"/> hrs remaining
+                    </span>
+                </div>
+
+            </t>
+        </xpath>
+
+    </field>
+</record>
 
 
 </odoo>

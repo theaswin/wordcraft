@@ -9,6 +9,8 @@
             <field name="arch" type="xml">
 
               <xpath expr="//field[@name='payment_term_id']" position="after">
+                      		<field name="confirmed_time" readonly="1" invisible="1"/>
+
             		<field name="deadline" required="1"/>
             	</xpath>
 

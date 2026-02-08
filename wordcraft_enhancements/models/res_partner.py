@@ -19,6 +19,13 @@ class ResPartner(models.Model):
         help="XLSX columns: name, mobile, category_name"
     )
     category_import_filename = fields.Char(string="Filename")
+    due_amount = fields.Float(string="Amount Due")
+    payment_amount_due = fields.Float(string="Payment Amount Due")
+    payment_amount_due_amt = fields.Float(string="Payment Amount Due (Amount)")
+    payment_amount_due_amt_supplier = fields.Float(string="Payment Amount Due (Amount)")
+    payment_amount_overdue = fields.Float(string="Overdue")
+
+
     due_invoice_count = fields.Integer(
         string="Due Invoice Count",
         compute="_compute_due_invoice_count",
@@ -35,29 +42,6 @@ class ResPartner(models.Model):
                 ('state', '=', 'posted'),
                 ('amount_residual', '>', 0),
             ])
-
-
-    def action_view_due_statement(self):
-        self.ensure_one()
-
-        invoices = self.env['account.move'].sudo().search([
-            ('partner_id', '=', self.id),
-            ('move_type', '=', 'out_invoice'),
-            ('state', '=', 'posted'),
-            ('amount_residual', '>', 0),
-        ])
-
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'Due Invoices',
-            'res_model': 'account.move',
-            'domain': [('id', 'in', invoices.ids)],
-            'view_mode': 'list,form',
-            'target': 'current',
-            'context': {
-                'default_partner_id': self.id,
-            },
-        }
     
 
 
@@ -108,4 +92,27 @@ class ResPartner(models.Model):
                 "message": _("Updated: %s\nSkipped: %s") % (updated, skipped),
                 "type": "success",
             }
+        }
+
+
+    def action_view_due_statement(self):
+        self.ensure_one()
+
+        invoices = self.env['account.move'].sudo().search([
+            ('partner_id', '=', self.id),
+            ('move_type', '=', 'out_invoice'),
+            ('state', '=', 'posted'),
+            ('amount_residual', '>', 0),
+        ])
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Due Invoices',
+            'res_model': 'account.move',
+            'domain': [('id', 'in', invoices.ids)],
+            'view_mode': 'list,form',
+            'target': 'current',
+            'context': {
+                'default_partner_id': self.id,
+            },
         }
