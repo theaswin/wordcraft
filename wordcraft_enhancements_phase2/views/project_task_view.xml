@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_project_task_kanban_deadline_hrs" model="ir.ui.view">
+        <field name="name">project.task.kanban.deadline.hrs</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="arch" type="xml">
+
+            <!-- Load field into kanban -->
+            <xpath expr="//kanban" position="inside">
+                <field name="deadline_hrs"/>
+                <field name="color_number"/>
+            </xpath>
+
+            <!-- Show below date_deadline -->
+<xpath expr="//field[@name='date_deadline']" position="after">
+    <t t-if="record.color_number.raw_value and
+            !['1_done','1_canceled'].includes(record.state.raw_value)">
+
+        <!-- 🔴 RED: less than 30% elapsed -->
+        <div t-if="record.color_number.raw_value &gt; 30"
+             class="d-flex align-items-baseline text-danger fw-bold">
+            <span class="fa fa-hourglass-half me-1"/>
+            <field name="deadline_hrs"/> hrs remaining
+            <!-- <span class="ms-1">(<t t-esc="record.color_number.raw_value"/>%)</span> -->
+        </div>
+
+        <!-- 🟡 YELLOW: 30% to 50% -->
+        <div t-elif="record.color_number.raw_value &gt;= 50"
+             class="d-flex align-items-baseline text-warning fw-bold">
+            <span class="fa fa-hourglass-half me-1"/>
+            <field name="deadline_hrs"/> hrs remaining
+            <!-- <span class="ms-1">(<t t-esc="record.color_number.raw_value"/>%)</span> -->
+        </div>
+
+        <!-- 🟢 GREEN: greater than 50% -->
+        <div t-else=""
+             class="d-flex align-items-baseline text-success fw-bold">
+            <span class="fa fa-hourglass-half me-1"/>
+            <field name="deadline_hrs"/> hrs remaining
+            <!-- <span class="ms-1">(<t t-esc="record.color_number.raw_value"/>%)</span> -->
+        </div>
+
+    </t>
+</xpath>
+
+        </field>
+    </record>
+
+</odoo>

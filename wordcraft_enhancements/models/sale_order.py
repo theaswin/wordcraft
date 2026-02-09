@@ -1,5 +1,6 @@
 from odoo import models, fields, _ , api
 from odoo.exceptions import UserError
+from datetime import timedelta
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
@@ -30,9 +31,11 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     confirmed_time = fields.Datetime(string="Confirmed Time", copy=False)
-    deadline = fields.Datetime(string="Deadline",copy=False)
+    deadline = fields.Datetime(string="Deadline",copy=False,default=lambda self: fields.Datetime.now() + timedelta(hours=1),)
     x_external_sol_id = fields.Integer(
         string="External Sale Order Line ID",
         index=True,
-        copy=False
+        copy=False,
+        
+
     )
