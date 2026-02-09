@@ -22,7 +22,7 @@
 
 {
     'name': 'WordCraft Customisation',
-    'version': '19.0.0.7',
+    'version': '19.0.0.8',
     'summary': 'This module ensures that accounting entries can only be posted if the corresponding Chart of Accounts is approved.',
     'category':'Accounting',
     'website': 'https://dxb.wordcraftgroup.com/',
