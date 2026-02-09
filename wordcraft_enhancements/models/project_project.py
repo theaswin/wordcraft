@@ -70,7 +70,6 @@ class ProjectProject(models.Model):
     # ------------------------------------------------------------
     @api.depends('sale_order_id.confirmed_time', 'sale_order_id.deadline')
     def _compute_deadline(self):
-
         for rec in self:
             rec.deadline_hrs = 0.0
             rec.color_number = 0.0
@@ -79,7 +78,7 @@ class ProjectProject(models.Model):
             if not sale or not sale.confirmed_time or not sale.deadline:
                 continue
 
-            # Convert to datetime
+            # Convert to datetime (UTC)
             start_utc = fields.Datetime.to_datetime(sale.confirmed_time)
             end_utc = fields.Datetime.to_datetime(sale.deadline)
             now_utc = fields.Datetime.now()
@@ -89,12 +88,10 @@ class ProjectProject(models.Model):
             end_dt = fields.Datetime.context_timestamp(rec, end_utc)
             now_dt = fields.Datetime.context_timestamp(rec, now_utc)
 
-            # Remaining hours
-            rec.deadline_hrs = rec.remaining_hours_dt(
-                start_dt, end_dt, now_dt
-            )
+            # ✅ Remaining hours (negative if overdue)
+            rec.deadline_hrs = (end_dt - now_dt).total_seconds() / 3600
 
-            # Elapsed percentage
+            # Elapsed percentage (safe)
             rec.color_number = rec.elapsed_percentage_dt(
                 start_dt, end_dt, now_dt
             )

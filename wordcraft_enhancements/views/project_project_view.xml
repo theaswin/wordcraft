@@ -31,7 +31,7 @@
             </div>
 
             <!-- Remaining time -->
-            <t t-if="record.deadline_hrs and record.deadline_hrs.raw_value">
+            <!-- <t t-if="record.deadline_hrs and record.deadline_hrs.raw_value"> -->
 
                 <!-- 🔴 RED (< 30%) -->
                 <div t-if="record.color_number.raw_value &gt; 30"
@@ -60,7 +60,7 @@
                     </span>
                 </div>
 
-            </t>
+            <!-- </t> -->
         </xpath>
 
     </field>
