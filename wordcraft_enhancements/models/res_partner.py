@@ -44,8 +44,6 @@ class ResPartner(models.Model):
             ])
     
 
-
-
     def action_import_partner_categories(self):
         self.ensure_one()
 
@@ -62,24 +60,79 @@ class ResPartner(models.Model):
         processed = 0
 
         Partner = self.env['res.partner']
+        Category = self.env['res.partner.category']
 
-        # Expected headers: name | mobile
+        # Expected headers:
+        # name | google_map_url | mobile | phone | vat | company_type | category_names | customer_rank
+
         for row in sheet.iter_rows(min_row=2, values_only=True):
             if processed >= max_rows:
                 break
-
             processed += 1
-            print("========================",row)
-            name, mobile = row[0],row[1]
 
-            if not name or not mobile:
+            (
+                name,
+                google_map_url,
+                mobile,
+                phone,
+                vat,
+                company_type,
+                category_names,
+                customer_rank
+            ) = row
+
+            if not name:
                 skipped += 1
                 continue
 
-            partner = Partner.search([('name', '=', name),('phone','=',False)])
+            # 🔎 Find partner by name
+            partner = Partner.search([('name', '=', name)], limit=1)
 
-            if partner:
-                partner.phone = str(mobile)
+            if not partner:
+                skipped += 1
+                continue
+
+            vals = {}
+
+            # ------------------------
+            # SIMPLE FIELDS
+            # ------------------------
+            if google_map_url:
+                vals['google_map_url'] = google_map_url
+            if mobile:
+                vals['mobile'] = str(mobile)
+            if phone:
+                vals['phone'] = str(phone)
+            if vat:
+                vals['vat'] = vat
+            if customer_rank is not None:
+                vals['customer_rank'] = int(customer_rank)
+
+            # ------------------------
+            # COMPANY TYPE
+            # ------------------------
+            if company_type:
+                vals['is_company'] = True if str(company_type).lower() == 'company' else False
+
+            # ------------------------
+            # PARTNER CATEGORIES (M2M)
+            # ------------------------
+            if category_names:
+                category_ids = []
+                for cat_name in str(category_names).split(','):
+                    cat_name = cat_name.strip()
+                    if not cat_name:
+                        continue
+                    category = Category.search([('name', '=', cat_name)], limit=1)
+                    if not category:
+                        category = Category.create({'name': cat_name})
+                    category_ids.append(category.id)
+
+                if category_ids:
+                    vals['category_id'] = [(6, 0, category_ids)]
+
+            if vals:
+                partner.write(vals)
                 updated += 1
             else:
                 skipped += 1
@@ -93,6 +146,8 @@ class ResPartner(models.Model):
                 "type": "success",
             }
         }
+
+
 
 
     def action_view_due_statement(self):
