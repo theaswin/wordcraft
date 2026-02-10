@@ -6,7 +6,7 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     confirmed_time = fields.Datetime(string="Confirmed Time", copy=False)
-    deadline = fields.Datetime(string="Deadline",copy=False)
+    deadline = fields.Datetime(string="Deadline",copy=False,default=lambda self: fields.Datetime.now() + timedelta(hours=1))
     x_external_so_id = fields.Integer(
         string="External Sale Order ID",
         index=True,
@@ -31,7 +31,7 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     confirmed_time = fields.Datetime(string="Confirmed Time", copy=False)
-    deadline = fields.Datetime(string="Deadline",copy=False,default=lambda self: fields.Datetime.now() + timedelta(hours=1),)
+    deadline = fields.Datetime(string="Deadline",copy=False)
     x_external_sol_id = fields.Integer(
         string="External Sale Order Line ID",
         index=True,
@@ -39,3 +39,9 @@ class SaleOrderLine(models.Model):
         
 
     )
+
+    @api.onchange('product_id')
+    def _onchange_product_id(self):
+        for rec in self:
+            if rec.order_id.deadline:
+                rec.deadline = rec.order_id.deadline

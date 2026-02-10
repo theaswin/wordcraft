@@ -12,6 +12,7 @@
                 class="oe_stat_button"
                 icon="fa-file-text-o"
                 groups="wordcraft_enhancements.group_access_due_statements"
+                invisible="1"
                 >
 
                 <div class="o_form_field o_stat_info">
