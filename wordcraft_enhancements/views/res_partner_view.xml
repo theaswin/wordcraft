@@ -30,6 +30,7 @@
             <xpath expr="//field[@name='category_id']" position="after">
                 <field name="google_map_url"/>
                 <field name="category_import_file" filename="category_import_filename"/>
+                <field name="mobile" filename="category_import_filename"/>
                 <button
                     name="action_import_partner_categories"
                     type="object"
