@@ -1,43 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record id="view_partner_form_inherit_category_import" model="ir.ui.view">
-        <field name="name">res.partner.form.import.category</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
-        <field name="arch" type="xml">
 
-        <xpath expr="//div[@name='button_box']" position="inside">
-            <button
-                type="object"
-                name="action_view_due_statement"
-                class="oe_stat_button"
-                icon="fa-file-text-o"
-                groups="wordcraft_enhancements.group_access_due_statements"
-                >
-
-                <div class="o_form_field o_stat_info">
-                    <span class="o_stat_value">
-                        <field name="due_invoice_count"/>
-                    </span>
-                    <span class="o_stat_text">Due Statements</span>
-                </div>
-
-            </button>
-
-
-        </xpath>
-
-            <!-- Add file upload after category field -->
-            <xpath expr="//field[@name='category_id']" position="after">
-                <field name="google_map_url"/>
-                <field name="category_import_file" filename="category_import_filename"/>
-                <button
-                    name="action_import_partner_categories"
-                    type="object"
-                    string="Import Categories from Excel"
-                    class="btn-primary"
-                    icon="fa-upload"/>
-            </xpath>
-
+    <record id="action_collect_advance_payment_partner" model="ir.actions.server">
+        <field name="name">Collect Advance Payment</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="state">code</field>
+        <field name="code">
+action = records.action_collect_advance_payment()
         </field>
     </record>
+
 </odoo>

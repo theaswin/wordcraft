@@ -36,7 +36,9 @@
     'depends': ['hr_timesheet'],
     'data': [
         'views/project_project_view.xml',
-        'views/sale_order_view.xml'
+        'views/sale_order_view.xml',
+        'views/res_partner_view.xml',
+        'views/account_payment_view.xml'
         ],
     'test': [],
     'demo': [],

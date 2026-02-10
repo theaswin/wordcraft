@@ -19,8 +19,8 @@
 #    If not, see <http://www.gnu.org/licenses/>.
 #
 ###############################################################################
-from odoo import fields, models
-
+from odoo import fields, models , api
+from odoo.exceptions import UserError
 
 class ResPartner(models.Model):
     """Inherits the model res.partner for display the total due amount
@@ -55,3 +55,5 @@ class ResPartner(models.Model):
         self.due_amount = sum(self.env['account.move'].search(
             [('partner_id', '=', self.id), ('payment_state', '!=', 'paid'),
              ('move_type', '=', 'out_invoice')]).mapped('amount_residual'))
+
+

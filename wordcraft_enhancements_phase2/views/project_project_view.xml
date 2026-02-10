@@ -20,7 +20,8 @@
 
                 <div t-if="record.project_assignee_ids.raw_value"
                      class="d-flex align-items-baseline text-danger fw-bold">
-                    📁
+                    <span class="fa fa-folder-open me-2 text-muted"/>
+
                     <span>
                         <field name="project_assignee_ids" widget="many2many_tags"/>
                     </span>
@@ -28,7 +29,8 @@
 
                 <div t-if="record.assignee_ids.raw_value"
                      class="d-flex align-items-baseline text-danger fw-bold">
-                    📌
+                        <span class="fa fa-tasks me-2 text-muted"/>
+
                     <span>
                         <field name="assignee_ids" widget="many2many_tags"/>
                     </span>
