@@ -31,36 +31,36 @@
             </div>
 
             <!-- Remaining time -->
-            <!-- <t t-if="record.deadline_hrs and record.deadline_hrs.raw_value"> -->
+            <t t-if="record.deadline_hrs and record.deadline_hrs.raw_value">
 
                 <!-- 🔴 RED (< 30%) -->
-                <!-- <div t-if="record.color_number.raw_value &gt; 30"
+                <div t-if="record.color_number.raw_value &gt; 30"
                      class="d-flex align-items-baseline text-danger fw-bold">
                     <span class="fa fa-hourglass-half me-2"/>
                     <span>
                         <field name="deadline_hrs"/> hrs remaining
                     </span>
-                </div> -->
+                </div>
 
                 <!-- 🟡 YELLOW (30–50%) -->
-                <!-- <div t-elif="record.color_number.raw_value &gt;= 50"
+                <div t-elif="record.color_number.raw_value &gt;= 50"
                      class="d-flex align-items-baseline text-warning fw-bold">
                     <span class="fa fa-hourglass-half me-2"/>
                     <span>
                         <field name="deadline_hrs"/> hrs remaining
                     </span>
-                </div> -->
+                </div>
 
                 <!-- 🟢 GREEN (> 50%) -->
-                <!-- <div t-else=""
+                <div t-else=""
                      class="d-flex align-items-baseline text-success fw-bold">
                     <span class="fa fa-hourglass-half me-2"/>
                     <span>
                         <field name="deadline_hrs"/> hrs remaining
                     </span>
-                </div> -->
+                </div>
 
-            <!-- </t> -->
+            </t>
         </xpath>
 
     </field>

@@ -2,8 +2,11 @@ from odoo import models, fields, api
 from datetime import timedelta
 
 
+
 class ProjectProject(models.Model):
     _inherit = "project.project"
+
+    _order = 'create_date desc'
 
     # ------------------------------------------------------------
     # Fields
@@ -30,32 +33,28 @@ class ProjectProject(models.Model):
     # Remaining hours (H.MM format)
     # ------------------------------------------------------------
     def remaining_hours_dt(self, start_dt, end_dt, now_dt):
-        if end_dt < start_dt:
-            end_dt += timedelta(days=1)
+        """
+        Returns remaining time as H.MM
+        Example:
+            1 hour 45 mins  -> 1.45
+            33 mins         -> 0.33
+            overdue 12 mins -> -0.12
+        """
 
-        if now_dt < start_dt:
-            now_dt += timedelta(days=1)
+        total_minutes = int((end_dt - now_dt).total_seconds() // 60)
 
-        total_minutes = int((end_dt - start_dt).total_seconds() // 60)
-        elapsed_minutes = int((now_dt - start_dt).total_seconds() // 60)
+        sign = -1 if total_minutes < 0 else 1
+        total_minutes = abs(total_minutes)
 
-        remaining_minutes = max(total_minutes - elapsed_minutes, 0)
+        hours = total_minutes // 60
+        minutes = total_minutes % 60
 
-        hours = remaining_minutes // 60
-        minutes = remaining_minutes % 60
-
-        return float(f"{hours}.{minutes:02d}")
+        return sign * float(f"{hours}.{minutes:02d}")
 
     # ------------------------------------------------------------
-    # Elapsed percentage
+    # Elapsed percentage (0–100 safe)
     # ------------------------------------------------------------
     def elapsed_percentage_dt(self, start_dt, end_dt, now_dt):
-        if end_dt < start_dt:
-            end_dt += timedelta(days=1)
-
-        if now_dt < start_dt:
-            now_dt += timedelta(days=1)
-
         total_seconds = (end_dt - start_dt).total_seconds()
         elapsed_seconds = (now_dt - start_dt).total_seconds()
 
@@ -78,7 +77,7 @@ class ProjectProject(models.Model):
             if not sale or not sale.confirmed_time or not sale.deadline:
                 continue
 
-            # Convert to datetime (UTC)
+            # Convert UTC → datetime
             start_utc = fields.Datetime.to_datetime(sale.confirmed_time)
             end_utc = fields.Datetime.to_datetime(sale.deadline)
             now_utc = fields.Datetime.now()
@@ -88,10 +87,12 @@ class ProjectProject(models.Model):
             end_dt = fields.Datetime.context_timestamp(rec, end_utc)
             now_dt = fields.Datetime.context_timestamp(rec, now_utc)
 
-            # ✅ Remaining hours (negative if overdue)
-            rec.deadline_hrs = (end_dt - now_dt).total_seconds() / 3600
+            # ✅ Remaining time (H.MM, supports negative)
+            rec.deadline_hrs = rec.remaining_hours_dt(
+                start_dt, end_dt, now_dt
+            )
 
-            # Elapsed percentage (safe)
+            # ✅ Elapsed percentage
             rec.color_number = rec.elapsed_percentage_dt(
                 start_dt, end_dt, now_dt
             )

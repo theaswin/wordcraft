@@ -11,6 +11,16 @@
                 <attribute name="invisible">context.get('hide_confirm_button')</attribute>
             </xpath>
 
+            <xpath expr="//sheet" position="inside">
+                <button name="action_save_and_post"
+                        type="object"
+                        string="Save &amp; Post"
+                        class="btn-primary"
+                        invisible="state != 'draft' or not context.get('hide_confirm_button')"
+                        />
+            </xpath>
+<!--  -->
+
         </field>
     </record>
 

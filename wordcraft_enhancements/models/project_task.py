@@ -5,6 +5,8 @@ from datetime import timedelta
 class ProjectTask(models.Model):
     _inherit = "project.task"
 
+    _order = 'create_date desc'
+
     # ------------------------------------------------------------
     # Fields
     # ------------------------------------------------------------

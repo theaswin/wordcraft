@@ -28,5 +28,6 @@ class ResPartner(models.Model):
                 'default_payment_type': 'inbound',
                 'default_journal_id': journal.id,
                 'hide_confirm_button': True,   # 👈 IMPORTANT
+                'hide_save_and_post_button': False,  # 👈 IMPORTANT
             }
         }
