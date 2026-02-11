@@ -6,6 +6,10 @@
         <record id="group_access_due_statements" model="res.groups">
             <field name="name">Access Due Statements</field>
         </record>
+
+        <record id="group_access_to_cancel_entries" model="res.groups">
+            <field name="name">Access To Cancel Entries</field>
+        </record>
         
     
     

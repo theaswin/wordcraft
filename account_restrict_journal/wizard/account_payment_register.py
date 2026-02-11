@@ -37,8 +37,8 @@ class AccountPaymentRegister(models.TransientModel):
                 wizard.available_journal_ids = (
                     wizard._get_batch_available_journals(batch))
             else:
-                wizard.available_journal_ids = self.env
-                ['account.journal'].search(
+            else:
+                wizard.available_journal_ids = self.env['account.journal'].search(
                     [('company_id', '=', wizard.company_id.id),
                      ('type', 'in', ('bank', 'cash')),
                      ('id', 'not in', self.env.user.journal_ids.ids)])

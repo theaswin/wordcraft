@@ -25,6 +25,13 @@ class SaleOrder(models.Model):
         return res
 
 
+    def action_cancel(self):
+        if not self.env.user.has_group(
+            'wordcraft_enhancements.group_access_to_cancel_entries'
+        ):
+            raise UserError(_("You are not allowed to cancel Sale Orders."))
+
+        return super().action_cancel()
 
 
 class SaleOrderLine(models.Model):
