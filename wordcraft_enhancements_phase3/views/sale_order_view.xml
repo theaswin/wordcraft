@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_order_frm_phase2" model="ir.ui.view">
+        <field name="name">sale.order.form.view.phase2</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Existing field -->
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="customer_tag_ids" widget="many2many_tags"/>
+            </xpath>
+
+            <!-- 🔥 Make ALL sale order lines editable -->
+            <xpath expr="//field[@name='order_line']/list" position="attributes">
+                <attribute name="editable">bottom</attribute>
+            </xpath>
+
+            <!-- Remove readonly on ALL order line fields -->
+            <xpath expr="//field[@name='order_line']//field[@name='product_template_id']" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+    
+        <record id="group_access_due_statements" model="res.groups">
+            <field name="name">Access Due Statements</field>
+        </record>
+        
+    
+    
+    </data>
+</odoo>
