@@ -11,6 +11,7 @@
               <xpath expr="//field[@name='payment_term_id']" position="after">
                       		<field name="confirmed_time" readonly="1" invisible="1"/>
 
+            		<field name="confirmed_time" invisible="1" readonly="1"/>
             		<field name="deadline" invisible="0" required="0"/>
             	</xpath>
 

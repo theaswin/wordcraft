@@ -33,7 +33,7 @@ class ResPartner(models.Model):
     def action_view_due_statements(self):
         """Function for showing the all invoices that not paid completely"""
         due_invoices = self.env['account.move'].search(
-            [('partner_id', '=', self.id), ('payment_state', '!=', 'paid'),
+            [('partner_id', '=', self.id), ('payment_state', '!=', 'paid'),('state','!=','cancel'),
              ('move_type', '=', 'out_invoice')]).invoice_line_ids.mapped('id')
         return {
             'res_model': 'account.move.line',
@@ -53,7 +53,7 @@ class ResPartner(models.Model):
     def _compute_due_amount(self):
         """Function for computing the total payment due of the customer"""
         self.due_amount = sum(self.env['account.move'].search(
-            [('partner_id', '=', self.id), ('payment_state', '!=', 'paid'),
+            [('partner_id', '=', self.id), ('payment_state', '!=', 'paid'),('state','!=','cancel'),
              ('move_type', '=', 'out_invoice')]).mapped('amount_residual'))
 
 

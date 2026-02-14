@@ -30,14 +30,14 @@
             <!-- Add file upload after category field -->
             <xpath expr="//field[@name='category_id']" position="after">
                 <field name="google_map_url"/>
-                <field name="category_import_file" filename="category_import_filename"/>
-                <field name="mobile" filename="category_import_filename"/>
-                <button
+                <!-- <field name="category_import_file" filename="category_import_filename"/> -->
+                <field name="mobile" />
+                <!-- <button
                     name="action_import_partner_categories"
                     type="object"
                     string="Import Categories from Excel"
                     class="btn-primary"
-                    icon="fa-upload"/>
+                    icon="fa-upload"/> -->
             </xpath>
 
         </field>

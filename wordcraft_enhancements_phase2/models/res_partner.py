@@ -15,6 +15,9 @@ class ResPartner(models.Model):
         )
         if not journal:
             raise UserError("Please configure a Bank or Cash journal.")
+        
+        not_allowed_journals = self.env.user.journal_ids.ids
+
 
         return {
             'type': 'ir.actions.act_window',
@@ -26,8 +29,9 @@ class ResPartner(models.Model):
                 'default_partner_id': self.id,
                 'default_partner_type': 'customer',
                 'default_payment_type': 'inbound',
-                'default_journal_id': journal.id,
-                'hide_confirm_button': True,   # 👈 IMPORTANT
-                'hide_save_and_post_button': False,  # 👈 IMPORTANT
+                'hide_confirm_button': True,
+                'hide_save_and_post_button': False,
+                'domain_journal_id': [('id', 'not in', not_allowed_journals)],
             }
         }
+

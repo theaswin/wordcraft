@@ -3,7 +3,7 @@ from io import BytesIO
 import base64
 from datetime import date
 import xlwt
-from odoo import fields, models
+from odoo import fields, models,api ,_
 from odoo.exceptions import UserError
 
 
@@ -16,8 +16,8 @@ class CustomerStatementWizard(models.TransientModel):
     _description = "Customer Statement Report"
     _rec_name = 'start_date'
 
-    start_date = fields.Date(string="Start Date", required=True)
-    end_date = fields.Date(string="End Date", required=True)
+    start_date = fields.Date(string="Start Date", required=True,default=lambda self: date(2025, 1, 1))
+    end_date = fields.Date(string="End Date", required=True,default=fields.Date.context_today)
     partner_id = fields.Many2one(
         "res.partner",
         string="Customer",
@@ -25,7 +25,13 @@ class CustomerStatementWizard(models.TransientModel):
         domain=[('invoice_ids', '!=', False)]
     )
 
+    
+
+
     def customer_statements_pdf_report(self):
+
+        print("self is ===================",self)
+        
         """
         Generates a PDF report for the customer statement based on the selected date range.
         Raises an error if the start date is later than the end date.
@@ -36,6 +42,8 @@ class CustomerStatementWizard(models.TransientModel):
         data = {
             'form_data': self.read()[0]
         }
+        print("data is ==================",data)
+        # asdf
         return self.env.ref('tk_customer_statements.customer_report_template_action').report_action(self, data=data)
 
     def customer_statements_excel_report(self):
@@ -120,7 +128,9 @@ class CustomerStatementWizard(models.TransientModel):
             ('invoice_date', '>=', self.start_date),
             ('invoice_date', '<=', self.end_date),
             ('partner_id', '=', self.partner_id.id),
-            ('move_type', '=', 'out_invoice')
+            ('move_type', '=', 'out_invoice'),
+            ('state','!=','cancel')
+
         ])
 
         sheet1.write_merge(0, 1, 0, 5, 'Statement Of Account', main_head)

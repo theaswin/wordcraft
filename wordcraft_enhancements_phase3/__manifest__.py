@@ -33,20 +33,15 @@
     'maintainer': 'WordCraft',
     'support': 'WordCraft',
     'license': 'LGPL-3',
-    'depends': ['sale'],
+    'depends': ['project','sale_management'],
     'data': [
-        'views/sale_order_report_action.xml',
-        'views/analytic_account_view.xml',
         # 'views/project_project_view.xml',
-        # 'views/sale_order_view.xml',
-        # 'views/res_partner_view.xml',
+        'views/res_partner_view.xml',
+        'views/sale_order_view.xml',
+        'reports/invoice_report.xml',
+        'reports/sale_order_reports.xml',
         # 'views/account_payment_view.xml'
         ],
-    'assets': {
-        'web.assets_backend': [
-            'wordcraft_enhancements_phase3/static/src/js/report_action.js',
-        ],
-    },
     'test': [],
     'demo': [],
     'installable': True,

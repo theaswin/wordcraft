@@ -10,4 +10,18 @@ action = records.action_collect_advance_payment()
         </field>
     </record>
 
+        <record id="res_partner_form_inherit_related_person" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.related.person</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="related_person_id"/>
+            </xpath>
+
+        </field>
+    </record>
+
+
 </odoo>

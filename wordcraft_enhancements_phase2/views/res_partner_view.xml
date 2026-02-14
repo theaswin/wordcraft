@@ -10,4 +10,16 @@ action = records.action_collect_advance_payment()
         </field>
     </record>
 
+
+    <!-- <record id="view_partner_form_inherit_category_import" model="ir.ui.view">
+        <field name="name">res.partner.form.import.category</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+             <xpath expr="//field[@name='category_id']" position="after">
+             </xpath>
+        </field>
+    </record> -->
+
 </odoo>

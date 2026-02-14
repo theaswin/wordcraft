@@ -38,6 +38,11 @@
             <field name="res_model">customer.statement.wizard</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>
+            <field name="context">
+                    {
+                        
+                    }
+                </field>
         </record>
     </data>
 </odoo>

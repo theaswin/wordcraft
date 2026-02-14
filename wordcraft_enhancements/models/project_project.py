@@ -67,37 +67,61 @@ class ProjectProject(models.Model):
     # ------------------------------------------------------------
     # Compute deadline + percentage
     # ------------------------------------------------------------
-    @api.depends('sale_order_id.confirmed_time', 'sale_order_id.deadline')
+    @api.depends(
+        'sale_order_id.confirmed_time',
+        'task_ids.sale_line_id.deadline'
+    )
     def _compute_deadline(self):
         for rec in self:
             rec.deadline_hrs = 0.0
             rec.color_number = 0.0
 
             sale = rec.sale_order_id
-            if not sale or not sale.confirmed_time or not sale.deadline:
+            if not sale or not sale.confirmed_time:
                 continue
 
-            # Convert UTC → datetime
+            # -------------------------------------------------
+            # START TIME (Sale Confirmation)
+            # -------------------------------------------------
             start_utc = fields.Datetime.to_datetime(sale.confirmed_time)
-            end_utc = fields.Datetime.to_datetime(sale.deadline)
+
+            # -------------------------------------------------
+            # END TIME = MAX sale_line_id.deadline from tasks
+            # -------------------------------------------------
+            deadlines = rec.task_ids.mapped('sale_line_id.deadline')
+            deadlines = [d for d in deadlines if d]
+
+            if not deadlines:
+                continue
+
+            end_utc = max(deadlines)
+
+            # -------------------------------------------------
+            # CURRENT TIME
+            # -------------------------------------------------
             now_utc = fields.Datetime.now()
 
+            # -------------------------------------------------
             # Convert to user timezone
+            # -------------------------------------------------
             start_dt = fields.Datetime.context_timestamp(rec, start_utc)
             end_dt = fields.Datetime.context_timestamp(rec, end_utc)
             now_dt = fields.Datetime.context_timestamp(rec, now_utc)
 
-            # ✅ Remaining time (H.MM, supports negative)
+            # -------------------------------------------------
+            # Remaining time (H.MM, supports negative)
+            # -------------------------------------------------
             rec.deadline_hrs = rec.remaining_hours_dt(
                 start_dt, end_dt, now_dt
             )
 
-            # ✅ Elapsed percentage
+            # -------------------------------------------------
+            # Elapsed %
+            # -------------------------------------------------
             rec.color_number = rec.elapsed_percentage_dt(
                 start_dt, end_dt, now_dt
             )
-
-    # ------------------------------------------------------------
+            # ------------------------------------------------------------
     # Sale product names
     # ------------------------------------------------------------
     @api.depends('sale_order_id.order_line')

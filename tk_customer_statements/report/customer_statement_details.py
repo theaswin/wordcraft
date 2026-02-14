@@ -29,7 +29,8 @@ class InvoiceAbstractReport(models.AbstractModel):
             ('invoice_date', '>=', start_date),
             ('invoice_date', '<=', end_date),
             ('partner_id', '=', partner_id[0]),
-            ('move_type', '=', 'out_invoice')
+            ('move_type', '=', 'out_invoice'),
+            ('state','!=','cancel')
         ])
 
         invoice_data = []

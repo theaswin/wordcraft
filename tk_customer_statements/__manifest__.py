@@ -23,6 +23,7 @@
         'wizard/customer_statement_view.xml',
         # Report
         'report/customer_statement_report_pdf.xml',
+        'views/res_partner_view.xml',
         # Views
         'views/menus.xml',
     ],
