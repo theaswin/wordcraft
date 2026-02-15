@@ -51,14 +51,13 @@ class ResPartner(models.Model):
         }
     
     
-
+    @api.model
     def cron_generate_customer_due(self):
-
-        self.ensure_one()
+        print("Cron Job Started: Generating Customer Due Statements")
         partners = self.env['res.partner'].sudo().search([('unreconciled_aml_ids','!=',False)])
         Wizard = self.env['customer.due.wizard']
         company = self.env.user.company_id
-        Wizard.search([('create_uid', '=', self.env.user.id)]).unlink()
+        Wizard.search([]).unlink()
         for partner in partners:
 
             amount_due = 0.0
@@ -73,9 +72,4 @@ class ResPartner(models.Model):
                 'amount_due': amount_due,
                 'credit_tag_ids': [(6, 0, partner.credit_tag_ids.ids)],
             })
-
-
-    @api.model
-    def action_print_hello(self):
-        print("HELLO WORLD FROM MENU CLICK")
         

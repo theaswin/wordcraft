@@ -149,14 +149,7 @@
                         context="{'group_by':'create_date'}"/>
                 
 
-                <!-- ================= ADVANCED GROUPING ================= -->
-                <!-- <filter name="group_partner_analytic"
-                        string="Customer + Analytic"
-                        context="{'group_by':['partner_id','analytic_account_id']}"/> -->
-
-                <!-- <filter name="group_partner_salesperson"
-                        string="Customer + Salesperson"
-                        context="{'group_by':['partner_id','user_id']}"/> -->
+                
 
             </search>
         </field>
@@ -171,6 +164,7 @@
                     Create customer due records.
                 </p>
             </field>
+            <field name="context">{'search_default_group_salesperson': 1}</field>
         </record>
 
     </data>

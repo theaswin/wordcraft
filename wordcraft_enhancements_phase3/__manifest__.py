@@ -36,7 +36,7 @@
     'depends': ['contacts','project','sale_management','wordcraft_enhancements'],
     'data': [
         'security/ir.model.access.csv',
-        # 'data/cron.xml',
+        'data/cron.xml',
         'views/res_partner_view.xml',
         'views/sale_order_view.xml',
         'views/credit_tag_view.xml',
