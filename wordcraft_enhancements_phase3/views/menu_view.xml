@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <odoo>
+
+
+        <menuitem id="menu_customer_due_statements"
+                        name="Customer Due Statements"
+                        parent="contacts.menu_contacts"
+                        action="action_customer_due"
+                        sequence="4"
+                />
+    </odoo>
+
+</odoo>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <record id="view_customer_due_list" model="ir.ui.view">
+            <field name="name">customer.due.list</field>
+            <field name="model">customer.due.wizard</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="partner_id"/>
+                    <field name="mobile"/>
+                    <field name="phone"/>
+                    <field name="email"/>
+                    <field name="user_id"/>
+                    <field name="analytic_account_id"/>
+                    <field name="debit"/>
+                    <field name="credit"/>
+                    <field name="balance"/>
+                    <field name="amount_due"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_customer_due_form" model="ir.ui.view">
+            <field name="name">customer.due.form</field>
+            <field name="model">customer.due.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Customer Due">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="partner_id"/>
+                                <field name="mobile"/>
+                                <field name="email"/>
+                            </group>
+                            <group>
+                                <field name="user_id"/>
+                                <field name="analytic_account_id"/>
+                                <field name="amount_due" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+    <record id="view_customer_due_wizard_search" model="ir.ui.view">
+        <field name="name">customer.due.wizard.search</field>
+        <field name="model">customer.due.wizard</field>
+        <field name="arch" type="xml">
+            <search string="Customer Due">
+
+                <!-- Quick Search Fields -->
+                <field name="partner_id"/>
+                <field name="analytic_account_id"/>
+                <field name="user_id"/>
+                <field name="email"/>
+                <field name="mobile"/>
+                <field name="phone"/>
+
+                <!-- ================= FILTERS ================= -->
+                <separator string="Due Filters"/>
+
+                
+
+                <filter name="balance_positive"
+                        string="Balance > 0"
+                        domain="[('balance','>',0)]"/>
+
+                 <filter name="balance_negative"
+                         string="Balance &lt; 0"
+                         domain="[('balance','&lt;',0)]"/>
+                        
+
+                <filter name="credit_only"
+                        string="Credit > 0"
+                        domain="[('credit','>',0)]"/>
+                <filter name="credit_negative"
+                        string="Credit &lt; 0"
+                        domain="[('credit','&lt;',0)]"/>
+
+                <filter name="debit_only"
+                        string="Debit > 0"
+                        domain="[('debit','>',0)]"/>
+
+                <filter name="debit_negative"
+                        string="Debit &lt; 0"
+                        domain="[('debit','&lt;',0)]"/>
+
+                <filter name="with_analytic"
+                        string="With Analytic Account"
+                        domain="[('analytic_account_id','!=',False)]"/>
+
+                <filter name="without_analytic"
+                        string="Without Analytic Account"
+                        domain="[('analytic_account_id','=',False)]"/>
+
+                <filter name="my_customers"
+                        string="My Customers"
+                        domain="[('user_id','=',uid)]"/>
+
+                <!-- ================= DATE FILTERS ================= -->
+                <separator string="Date Filters"/>
+
+                <filter name="today"
+                        string="Today"
+                        domain="[('create_date','&gt;=',context_today())]"/>
+
+                <filter name="this_month"
+                        string="This Month"
+                        domain="[
+                            ('create_date','&gt;=',(context_today().replace(day=1))),
+                            ('create_date','&lt;=',context_today())
+                        ]"/>
+
+                
+
+
+                <!-- ================= GROUP BY ================= -->
+                <separator string="Group By"/>
+                <filter name="group_partner"
+                        string="Customer"
+                        context="{'group_by':'partner_id'}"/>
+
+                
+
+                <filter name="group_salesperson"
+                        string="Salesperson"
+                        context="{'group_by':'user_id'}"/>
+
+                <filter name="group_analytic"
+                        string="Analytic Account"
+                        context="{'group_by':'analytic_account_id'}"/>
+
+                <filter name="group_plan"
+                        string="Analytic Plan"
+                        context="{'group_by':'plan_id'}"/>
+
+                <filter name="group_currency"
+                        string="Currency"
+                        context="{'group_by':'currency_id'}"/>
+
+                <filter name="group_created"
+                        string="Created On"
+                        context="{'group_by':'create_date'}"/>
+                
+
+                <!-- ================= ADVANCED GROUPING ================= -->
+                <!-- <filter name="group_partner_analytic"
+                        string="Customer + Analytic"
+                        context="{'group_by':['partner_id','analytic_account_id']}"/> -->
+
+                <!-- <filter name="group_partner_salesperson"
+                        string="Customer + Salesperson"
+                        context="{'group_by':['partner_id','user_id']}"/> -->
+
+            </search>
+        </field>
+    </record>
+
+        <record id="action_customer_due" model="ir.actions.act_window">
+            <field name="name">Customer Due</field>
+            <field name="res_model">customer.due.wizard</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create customer due records.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

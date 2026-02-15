@@ -33,14 +33,15 @@
     'maintainer': 'WordCraft',
     'support': 'WordCraft',
     'license': 'LGPL-3',
-    'depends': ['project','sale_management'],
+    'depends': ['project','sale_management','wordcraft_enhancements'],
     'data': [
-        # 'views/project_project_view.xml',
+        'security/ir.model.access.csv',
         'views/res_partner_view.xml',
         'views/sale_order_view.xml',
+        'wizard/customer_due_wizard_view.xml',
         'reports/invoice_report.xml',
         'reports/sale_order_reports.xml',
-        # 'views/account_payment_view.xml'
+        'views/menu_view.xml',
         ],
     'test': [],
     'demo': [],
@@ -48,6 +49,5 @@
     'auto_install': False,
     'application': False,
 }
-
 
 
