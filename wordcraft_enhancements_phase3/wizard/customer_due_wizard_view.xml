@@ -6,17 +6,20 @@
             <field name="name">customer.due.list</field>
             <field name="model">customer.due.wizard</field>
             <field name="arch" type="xml">
-                <list>
-                    <field name="partner_id"/>
-                    <field name="mobile"/>
-                    <field name="phone"/>
-                    <field name="email"/>
-                    <field name="user_id"/>
-                    <field name="analytic_account_id"/>
-                    <field name="debit"/>
-                    <field name="credit"/>
-                    <field name="balance"/>
-                    <field name="amount_due"/>
+                <list editable="bottom">
+                    <field name="sale_id" optional="hide"/>
+                    <field name="partner_id" readonly="1"/>
+                    <field name="mobile" readonly="1"/>
+                    <field name="phone" readonly="1"/>
+                    <field name="email" readonly="1"/>
+                    <field name="credit_tag_ids"  widget="many2many_tags" options="{'color_field': 'color'}" />
+
+                    <field name="user_id" optional="hide"/>
+                    <field name="analytic_account_ids" widget="many2many_tags" optional="hide"/>
+                    <field name="debit" optional="hide" readonly="1"/>
+                    <field name="credit" optional="hide" readonly="1"/>
+                    <field name="balance" optional="hide" readonly="1"/>
+                    <field name="amount_due" optional="show" readonly="1"/>
                 </list>
             </field>
         </record>
@@ -35,7 +38,6 @@
                             </group>
                             <group>
                                 <field name="user_id"/>
-                                <field name="analytic_account_id"/>
                                 <field name="amount_due" readonly="1"/>
                             </group>
                         </group>
@@ -122,6 +124,7 @@
                 <filter name="group_partner"
                         string="Customer"
                         context="{'group_by':'partner_id'}"/>
+                
 
                 
 
@@ -162,7 +165,7 @@
         <record id="action_customer_due" model="ir.actions.act_window">
             <field name="name">Customer Due</field>
             <field name="res_model">customer.due.wizard</field>
-            <field name="view_mode">list,form</field>
+            <field name="view_mode">list</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     Create customer due records.

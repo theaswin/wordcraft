@@ -23,6 +23,8 @@ action = records.action_collect_advance_payment()
         </field>
     </record>
 
+        
+
 
     <record id="action_view_due_statements" model="ir.actions.server">
         <field name="name">View Due Statements</field>

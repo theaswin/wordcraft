@@ -8,39 +8,74 @@ class ResPartner(models.Model):
 
     related_person_id = fields.Many2one('res.users',string="Related Person")
 
-    
+    credit_tag_ids = fields.Many2many(
+        comodel_name='cred.tag',
+        relation='res_partners_cred_tag_rel',
+        column1='partners_id',
+        column2='tags_id',
+        string='Credit Tags'
+    )
+
+
 
 
     def action_view_due_statements(self):
         self.ensure_one()
+        partners = self.env['res.partner'].sudo().search([('unreconciled_aml_ids','!=',False)])
+        Wizard = self.env['customer.due.wizard']
+        Move = self.env['account.move']
+        company = self.env.user.company_id
+        Wizard.search([('create_uid', '=', self.env.user.id)]).unlink()
+        for partner in partners:
 
-        analytic_ids = self.env['account.analytic.account'].search(
-            [
-                ('partner_id', '!=', False),
-            ]
-        )
-
-
-        self.env['customer.due.wizard'].search([('create_uid','=',self.env.user.id)]).unlink()  # Clear existing wizard records
-
-        for acc in analytic_ids:
-            rec = self.env['customer.due.wizard'].create({
-                'partner_id': acc.partner_id.id,
-                'analytic_account_id': acc.id,
+            amount_due = 0.0
+            for aml in  partner.unreconciled_aml_ids:
+                if (aml.company_id == company) and (aml.move_id.state != 'cancel') :
+                    amount_due += aml.result
+            Wizard.create({
+                'partner_id': partner.id,
+                'mobile':partner.mobile,
+                'phone':partner.phone,
+                'email':partner.email,
+                'amount_due': amount_due,
+                'credit_tag_ids': [(6, 0, partner.credit_tag_ids.ids)],
             })
-            rec._compute_due_amount()  # Compute due amount for each record
-            rec.compute_plan()  # Compute debit, credit, and balance for each record
-
-        
-
         return {
             'type': 'ir.actions.act_window',
             'name': 'Customer Due Statements',
             'res_model': 'customer.due.wizard',
             'view_mode': 'list',
             'context': {
-                'search_default_group_partner': 1,
+                'search_default_group_salesperson': 1,
             }
-
         }
+    
+    
 
+    def cron_generate_customer_due(self):
+
+        self.ensure_one()
+        partners = self.env['res.partner'].sudo().search([('unreconciled_aml_ids','!=',False)])
+        Wizard = self.env['customer.due.wizard']
+        company = self.env.user.company_id
+        Wizard.search([('create_uid', '=', self.env.user.id)]).unlink()
+        for partner in partners:
+
+            amount_due = 0.0
+            for aml in  partner.unreconciled_aml_ids:
+                if (aml.company_id == company) and (aml.move_id.state != 'cancel') :
+                    amount_due += aml.result
+            Wizard.create({
+                'partner_id': partner.id,
+                'mobile':partner.mobile,
+                'phone':partner.phone,
+                'email':partner.email,
+                'amount_due': amount_due,
+                'credit_tag_ids': [(6, 0, partner.credit_tag_ids.ids)],
+            })
+
+
+    @api.model
+    def action_print_hello(self):
+        print("HELLO WORLD FROM MENU CLICK")
+        

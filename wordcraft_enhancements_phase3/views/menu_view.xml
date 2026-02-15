@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <odoo>
+    <menuitem
+        id="menu_cred_tag"
+        name="Credit Tags"
+        parent="contacts.menu_partner_category_form"
+        action="action_cred_tag"
+        sequence="25"/>
+        
+    <menuitem
+        id="menu_contact_tags"
+        name="Contact Tags"
+        parent="contacts.menu_partner_category_form"
+        action="base.action_partner_category_form"
+        sequence="26"/>
 
-
+        
         <menuitem id="menu_customer_due_statements"
                         name="Customer Due Statements"
                         parent="contacts.menu_contacts"
