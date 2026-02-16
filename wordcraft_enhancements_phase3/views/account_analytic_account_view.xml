@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Tree View for Analytic Accounts -->
+        <record id="view_account_analytic_account_public_tree" model="ir.ui.view">
+            <field name="name">account.analytic.account.public.tree</field>
+            <field name="model">account.analytic.account</field>
+            <field name="arch" type="xml">
+                <list string="Analytic Accounts" create="false" edit="false" delete="false">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="partner_id"/>
+                    <field name="plan_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Form View for Analytic Accounts -->
+        <record id="view_account_analytic_account_public_form" model="ir.ui.view">
+            <field name="name">account.analytic.account.public.form</field>
+            <field name="model">account.analytic.account</field>
+            <field name="arch" type="xml">
+                <form string="Analytic Account" create="false" edit="false" delete="false">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="code" readonly="1"/>
+                                <field name="partner_id" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="plan_id" readonly="1"/>
+                                <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View for Analytic Accounts -->
+        <record id="view_account_analytic_account_public_search" model="ir.ui.view">
+            <field name="name">account.analytic.account.public.search</field>
+            <field name="model">account.analytic.account</field>
+            <field name="arch" type="xml">
+                <search string="Analytic Accounts">
+                    <!-- Quick Search Fields -->
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="partner_id"/>
+                    <field name="plan_id"/>
+
+                    <!-- Filters -->
+                    <separator string="Filters"/>
+                    <filter name="with_partner"
+                            string="With Partner"
+                            domain="[('partner_id','!=',False)]"/>
+                    <filter name="without_partner"
+                            string="Without Partner"
+                            domain="[('partner_id','=',False)]"/>
+
+                    <!-- Group By -->
+                    <separator string="Group By"/>
+                    <filter name="group_partner"
+                            string="Partner"
+                            context="{'group_by':'partner_id'}"/>
+                    <filter name="group_plan"
+                            string="Analytic Plan"
+                            context="{'group_by':'plan_id'}"/>
+                    <filter name="group_company"
+                            string="Company"
+                            context="{'group_by':'company_id'}"
+                            groups="base.group_multi_company"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action for Public Analytic Accounts -->
+        <record id="action_account_analytic_account_public" model="ir.actions.act_window">
+            <field name="name">Analytic Accounts</field>
+            <field name="res_model">account.analytic.account</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_account_analytic_account_public_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    View analytic accounts.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

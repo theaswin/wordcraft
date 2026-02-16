@@ -43,6 +43,7 @@
         'wizard/customer_due_wizard_view.xml',
         'reports/invoice_report.xml',
         'reports/sale_order_reports.xml',
+        'views/account_analytic_account_view.xml',
         'views/menu_view.xml',
         ],
     'test': [],
