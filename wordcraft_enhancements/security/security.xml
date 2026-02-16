@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
+<odoo noupdate="1">
     <data>
         
     
         <record id="group_access_due_statements" model="res.groups">
-            <field name="name">Access Due Statements</field>
+            <field name="name">Access Due Statements (Admin)</field>
         </record>
+
+    
 
         <record id="group_access_to_cancel_entries" model="res.groups">
             <field name="name">Access To Cancel Entries</field>
