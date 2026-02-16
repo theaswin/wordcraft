@@ -33,8 +33,9 @@
     'maintainer': 'WordCraft',
     'support': 'WordCraft',
     'license': 'LGPL-3',
-    'depends': ['contacts','project','sale_management','wordcraft_enhancements'],
+    'depends': ['sale','contacts','project','sale_management','wordcraft_enhancements'],
     'data': [
+        'security/security.xml',
         'security/ir.model.access.csv',
         'data/cron.xml',
         'views/res_partner_view.xml',

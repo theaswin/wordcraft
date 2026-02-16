@@ -1,34 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
+<odoo >
     <odoo>
-    <menuitem
-        id="menu_cred_tag"
-        name="Credit Tags"
-        parent="contacts.menu_partner_category_form"
-        action="action_cred_tag"
-        sequence="25"/>
-        
-    <menuitem
-        id="menu_contact_tags"
-        name="Contact Tags"
-        parent="contacts.menu_partner_category_form"
-        action="base.action_partner_category_form"
-        sequence="26"/>
+        <menuitem
+            id="menu_cred_tag"
+            name="Credit Tags"
+            parent="contacts.menu_partner_category_form"
+            action="action_cred_tag"
+            sequence="25"/>
+            
+        <menuitem
+            id="menu_contact_tags"
+            name="Contact Tags"
+            parent="contacts.menu_partner_category_form"
+            action="base.action_partner_category_form"
+            sequence="26"/>
 
+        <!-- ================================================================== -->
         
         <menuitem id="menu_customer_due_statements"
-                        name="Customer Due Statements"
-                        parent="contacts.menu_contacts"
-                        action="action_customer_due"
-                        sequence="4"
+            name="Customer Due Statements"
+            parent="contacts.menu_contacts"
+            action="action_customer_due"
+            groups="account.group_account_invoice"
+            sequence="4"
+                />
+        
+        <menuitem id="menu_customer_due_statements_users"
+            name="Customer Due Statements"
+            parent="contacts.menu_contacts"
+            action="action_customer_due_users"
+            groups="group_access_due_statements_users"
+            sequence="5"
                 />
 
+        <!-- ================================================================== -->
+
         <menuitem id="menu_analytic_accounts_public"
-                        name="Analytic Accounts"
-                        parent="contacts.menu_contacts"
-                        action="action_account_analytic_account_public"
-                        sequence="5"
-                />
+            name="Analytic Accounts"
+            parent="contacts.menu_contacts"
+            action="action_account_analytic_account_public"
+            groups="group_analytic_account_public"
+            sequence="8"/>
+
+        <menuitem id="menu_analytic_accounts_public_users"
+            name="Analytic Accounts"
+            parent="contacts.menu_contacts"
+            action="action_account_analytic_account_public_users"
+            groups="group_analytic_account_public_users"
+            sequence="9"/>
     </odoo>
 
 </odoo>

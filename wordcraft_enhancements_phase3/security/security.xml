@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
+<odoo noupdate="1">
     <data>
-        
-    
+
         <record id="group_access_due_statements" model="res.groups">
             <field name="name">Access Due Statements</field>
         </record>
+        <record id="group_access_due_statements_users" model="res.groups">
+            <field name="name">Access Due Statements Users</field>
+        </record>
+
+        <record id="group_analytic_account_public" model="res.groups">
+            <field name="name">Analytic Accounts Public</field>
+        </record>
+        <record id="group_analytic_account_public_users" model="res.groups">
+            <field name="name">Analytic Accounts Public Users</field>
+        </record>
         
-    
-    
     </data>
 </odoo>
