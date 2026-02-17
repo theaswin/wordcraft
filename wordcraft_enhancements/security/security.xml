@@ -4,7 +4,7 @@
         
     
         <record id="group_access_due_statements" model="res.groups">
-            <field name="name">Access Due Statements (Admin)</field>
+            <field name="name">Show Due Statements</field>
         </record>
 
     

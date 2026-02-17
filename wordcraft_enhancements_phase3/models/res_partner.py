@@ -19,7 +19,7 @@ class ResPartner(models.Model):
 
 
 
-    def action_view_due_statements(self):
+    def action_view_credit_statements(self):
         self.ensure_one()
 
         Wizard = self.env['customer.due.wizard'].sudo()
@@ -39,12 +39,12 @@ class ResPartner(models.Model):
             # 🔍 STRICT search → one partner = one wizard
             wizard = Wizard.search([
                 ('partner_id', '=', partner.id),
-                ('company_id', '=', company.id),
+                # ('company_id', '=', company.id),
             ], limit=1)
 
             values = {
                 'partner_id': partner.id,
-                'company_id': company.id,
+                # 'company_id': company.id,
                 'mobile': partner.mobile,
                 'phone': partner.phone,
                 'email': partner.email,

@@ -18,6 +18,7 @@ class ResPartner(models.Model):
         
         not_allowed_journals = self.env.user.journal_ids.ids
 
+        print("not_allowed_journals===========",not_allowed_journals)
 
         return {
             'type': 'ir.actions.act_window',

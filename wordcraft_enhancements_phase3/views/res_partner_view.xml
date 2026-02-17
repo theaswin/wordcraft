@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-    <record id="action_collect_advance_payment_partner" model="ir.actions.server">
-        <field name="name">Collect Advance Payment</field>
-        <field name="model_id" ref="base.model_res_partner"/>
-        <field name="state">code</field>
-        <field name="code">
-action = records.action_collect_advance_payment()
-        </field>
-    </record>
+    
 
         <record id="res_partner_form_inherit_related_person" model="ir.ui.view">
         <field name="name">res.partner.form.inherit.related.person</field>
@@ -26,12 +19,12 @@ action = records.action_collect_advance_payment()
         
 
 
-    <record id="action_view_due_statements" model="ir.actions.server">
+    <record id="action_view_credit_statements" model="ir.actions.server">
         <field name="name">View Due Statements</field>
         <field name="model_id" ref="base.model_res_partner"/>
         <field name="state">code</field>
         <field name="code">
-            action = records.action_view_due_statements()
+            action = records.action_view_credit_statements()
         </field>
     </record>
 
