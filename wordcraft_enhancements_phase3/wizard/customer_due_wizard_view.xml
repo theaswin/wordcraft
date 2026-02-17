@@ -12,6 +12,7 @@
                     <field name="mobile" readonly="1"/>
                     <field name="phone" readonly="1"/>
                     <field name="email" readonly="1"/>
+                    <field name="city" readonly="1"/>
                     <field name="credit_tag_ids"  widget="many2many_tags" options="{'color_field': 'color'}" />
 
                     <field name="user_id" optional="hide"/>

@@ -48,6 +48,7 @@ class ResPartner(models.Model):
                 'mobile': partner.mobile,
                 'phone': partner.phone,
                 'email': partner.email,
+                'city': partner.city,
                 'amount_due': amount_due,
                 'credit_tag_ids': [(6, 0, partner.credit_tag_ids.ids)],
             }
@@ -98,6 +99,7 @@ class ResPartner(models.Model):
                 'mobile': partner.mobile,
                 'phone': partner.phone,
                 'email': partner.email,
+                'city': partner.city,
                 'amount_due': amount_due,
                 'credit_tag_ids': [(6, 0, partner.credit_tag_ids.ids)],
             }
