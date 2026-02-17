@@ -8,6 +8,20 @@
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="user_id"/>
             </xpath>
+            <!-- <xpath expr="//field[@name='plan_id']" position="after">
+                <field name="debit" optional="show" groups="base.group_user"/>
+                <field name="credit" optional="show" groups="base.group_user"/>
+            </xpath> -->
+
+            <xpath expr="//field[@name='code']" position="attributes">
+                <attribute name="optional">show</attribute>
+            </xpath>
+            <xpath expr="//field[@name='company_id']" position="attributes">
+                <attribute name="optional">show</attribute>
+            </xpath>
+            <xpath expr="//field[@name='plan_id']" position="attributes">
+                <attribute name="optional">show</attribute>
+            </xpath>
         </field>
     </record>
 </odoo>

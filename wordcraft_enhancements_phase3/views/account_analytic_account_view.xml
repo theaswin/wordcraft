@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <!-- Inherit standard Odoo analytic account tree to make debit/credit visible to all users -->
+        <record id="view_account_analytic_account_inherit_debit_credit" model="ir.ui.view">
+            <field name="name">account.analytic.account.inherit.debit.credit</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_list"/>
+            <field name="arch" type="xml">
+                <!-- Remove group restrictions from debit field if it exists -->
+                <xpath expr="//field[@name='debit']" position="attributes">
+                    <attribute name="groups"></attribute>
+                    <attribute name="optional">show</attribute>
+                </xpath>
+                <!-- Remove group restrictions from credit field if it exists -->
+                <xpath expr="//field[@name='credit']" position="attributes">
+                    <attribute name="groups"></attribute>
+                    <attribute name="optional">show</attribute>
+                </xpath>
+            </field>
+        </record>
+
         <!-- Tree View for Analytic Accounts -->
         <record id="view_account_analytic_account_public_tree" model="ir.ui.view">
             <field name="name">account.analytic.account.public.tree</field>
@@ -11,6 +30,8 @@
                     <field name="code"/>
                     <field name="partner_id"/>
                     <field name="plan_id"/>
+                    <field name="debit" />
+                    <field name="credit" />
                     <field name="company_id" groups="base.group_multi_company"/>
                 </list>
             </field>
