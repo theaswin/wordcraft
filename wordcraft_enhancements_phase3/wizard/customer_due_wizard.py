@@ -1,6 +1,6 @@
 from odoo import models, fields, api
 
-class CustomerDueWizard(models.TransientModel):
+class CustomerDueWizard(models.Model):
     _name = 'customer.due.wizard'
     _description = 'Customer Due Wizard'
 
@@ -23,6 +23,7 @@ class CustomerDueWizard(models.TransientModel):
         readonly=True,
         help='All analytic accounts linked to this customer'
     )
+    city = fields.Char(string="City")
 
     
 
