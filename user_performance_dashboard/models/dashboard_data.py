@@ -96,5 +96,5 @@ class DashboardData(models.AbstractModel):
             'amount_due': f"SAR {amount_due:,.2f}",
             'amount_due_count': amount_due_count,
             # Backwards compatibility
-            'payment_amount': f"SAR {payments_posted_amount:,.2f}",
+            'payment_amount': f"SAR {"-":,.2f}",
         }
