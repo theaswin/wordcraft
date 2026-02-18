@@ -123,6 +123,21 @@
     gap: 20px;
 }
 
+/* Compact tiles row styling */
+.metrics_row .metric_tile {
+    min-height: 140px;
+    padding: 18px;
+}
+
+/* Left-align the metrics row so the first (quotations) sits a bit left */
+/* metrics row default layout (no forced left alignment / animation) */
+
+.tile_amount {
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: rgba(0,0,0,0.7);
+}
+
 .filter_item {
     display: flex;
     flex-direction: column;
@@ -204,4 +219,45 @@
 
 .tile_incentive .tile_icon {
     color: #166534;
+}
+
+/* Amount Due tile color */
+.tile_amount_due {
+    background: #EDDCC6;
+    color: #4b2e10;
+}
+.tile_amount_due .tile_icon {
+    color: rgba(0,0,0,0.6);
+}
+
+/* Slightly increase Payments Received tile width */
+.tile_payments_posted {
+    min-width: 220px;
+}
+
+/* Background colors for new tiles */
+.tile_quotations {
+    background: linear-gradient(135deg,#fef3c7,#fde68a);
+    color: #92400e;
+}
+.tile_sales {
+    background: linear-gradient(135deg,#dbeafe,#93c5fd);
+    color: #1e3a8a;
+}
+.tile_invoices_unpaid {
+    background: linear-gradient(135deg,#fee2e2,#fecaca);
+    color: #9b1c1c;
+}
+.tile_invoices_paid {
+    background: linear-gradient(135deg,#dcfce7,#bbf7d0);
+    color: #065f46;
+}
+.tile_payments_posted {
+    background: linear-gradient(135deg,#eef2ff,#e0e7ff);
+    color: #3730a3;
+}
+
+/* Ensure icons contrast */
+.tile_quotations .tile_icon, .tile_sales .tile_icon, .tile_invoices_unpaid .tile_icon, .tile_invoices_paid .tile_icon, .tile_payments_posted .tile_icon {
+    color: rgba(0,0,0,0.6);
 }

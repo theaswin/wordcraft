@@ -7,8 +7,9 @@ import { useService } from "@web/core/utils/hooks";
 class UserPerformanceDashboard extends Component {
     setup() {
         this.orm = useService("orm");
+        this._settingFilter = false;
+        this._lastFetchParams = null;
 
-        // Date calculation for default filter
         const today = new Date();
         const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
         const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
@@ -35,18 +36,36 @@ class UserPerformanceDashboard extends Component {
     }
 
     async _fetch_data() {
-        const res = await this.orm.call("user.performance.dashboard", "get_dashboard_data", [], {
+        const params = {
             start_date: this.state.filters.start_date,
             end_date: this.state.filters.end_date,
             target_user_id: parseInt(this.state.filters.user_id) || null,
-        });
+        };
+
+        try {
+            const same = this._lastFetchParams && this._lastFetchParams.start_date === params.start_date && this._lastFetchParams.end_date === params.end_date && this._lastFetchParams.target_user_id === params.target_user_id;
+            if (same) {
+                return;
+            }
+        } catch (e) {
+            // ignore
+        }
+
+        const res = await this.orm.call("user.performance.dashboard", "get_dashboard_data", [], params);
         this.state.user_data = res;
         if (!this.state.filters.user_id) {
+            this._settingFilter = true;
             this.state.filters.user_id = res.current_user_id;
+            setTimeout(() => { this._settingFilter = false; }, 0);
         }
+
+        this._lastFetchParams = params;
     }
 
     async _onFilterChange() {
+        if (this._settingFilter) {
+            return;
+        }
         await this._fetch_data();
     }
 }
