@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="customer_metric_dashboard.CustomerMetricDashboardTemplate" owl="1">
+        <div class="o_dashboards" style="background-color: #f8fafc; height: 100%; overflow-y: auto; font-family: 'Inter', sans-serif;">
+            <div class="container-fluid qweb_dashboard" style="padding: 30px;">
+                <div class="row mt-3 mb-4">
+                    <div class="col-12 text-center">
+                        <h2 class="mb-2 font-weight-bold" style="color: #24292e;">Performance Overview</h2>
+                    </div>
+                </div>
+
+                <div class="row mb-5 mt-4">
+                    <!-- Left Profile Section -->
+                    <div class="col-md-3 col-sm-12">
+                        <div class="user-profile-sidebar p-3 text-center text-md-left">
+                            <div class="profile-avatar-container mb-4">
+                                <img t-att-src="state.user_data.image_url" class="rounded-circle shadow-lg profile-avatar" style="width: 180px; height: 180px; object-fit: cover; border: 5px solid white; transition: all 0.3s ease-in-out;"/>
+                            </div>
+                            <div class="profile-info">
+                                <h1 class="font-weight-bold mb-1" style="font-size: 24px; color: #24292e;"><t t-esc="state.user_data.name"/></h1>
+                                <div class="h5 text-muted mb-0 font-weight-normal" style="font-size: 16px;"><t t-esc="state.user_data.job_title"/></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Metric Section -->
+                    <div class="col-md-9 col-sm-12">
+                        <div class="row">
+                            <!-- My Customers -->
+                            <div class="col-md-4 col-sm-12 mb-3 px-2">
+                                <div class="sla-card-bright-blue p-4 shadow-sm h-100 position-relative sla-card text-center o_dashboard_action" 
+                                     style="min-height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer;"
+                                     data-model="res.partner" data-name="My Customers" data-domain="[[&quot;user_id&quot;, &quot;=&quot;, &quot;USER_ID&quot;]]"
+                                     t-on-click="_onDashboardActionClick">
+                                    <div class="d-flex align-items-center mb-3 justify-content-center">
+                                        <i class="fa fa-users fa-2x mr-2"></i>
+                                        <div class="text-uppercase small font-weight-bold mb-0" style="letter-spacing: 1px;">My Customers</div>
+                                    </div>
+                                    <div class="h2 mb-0 font-weight-bold"><t t-esc="state.metrics_data.customer_count"/></div>
+                                    <div class="small mt-2" style="opacity: 0.8;">Active Portfolios</div>
+                                </div>
+                            </div>
+                            <!-- Incentives (Green Tile) -->
+                            <div class="col-md-8 col-sm-12 mb-3 px-2">
+                                <div class="sla-card-soft-green p-4 shadow-sm h-100 position-relative sla-card text-center o_dashboard_action" 
+                                     style="min-height: 200px; border: none; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer;"
+                                     data-model="account.payment" data-name="Incentives" data-domain="[[&quot;state&quot;, &quot;=&quot;, &quot;posted&quot;], [&quot;partner_id.user_id&quot;, &quot;=&quot;, &quot;USER_ID&quot;]]"
+                                     t-on-click="_onDashboardActionClick">
+                                    <div class="position-relative" style="z-index: 2; width: 100%;">
+                                        <div class="d-flex align-items-center mb-2 justify-content-center">
+                                            <i class="fa fa-money fa-2x mr-2"></i>
+                                            <div class="text-uppercase small font-weight-bold mb-0" style="letter-spacing: 1px;">Incentives</div>
+                                        </div>
+                                        <div class="h2 mb-0 font-weight-bold"><t t-esc="state.metrics_data.payment_amount"/></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Second Row with 5 Metrics -->
+                        <div class="row">
+                            <!-- Quotation -->
+                            <div class="col-lg col-md-4 col-sm-12 mb-3 px-1">
+                                <div class="sla-card p-3 shadow-sm h-100 text-center o_dashboard_action sla-card-grey" 
+                                     style="cursor: pointer;"
+                                     data-model="sale.order" data-name="Quotations" data-domain="[[&quot;state&quot;, &quot;in&quot;, [&quot;draft&quot;, &quot;sent&quot;]], [&quot;partner_id.user_id&quot;, &quot;=&quot;, &quot;USER_ID&quot;]]"
+                                     t-on-click="_onDashboardActionClick">
+                                    <div class="small text-muted text-uppercase font-weight-bold mb-1">Quotation</div>
+                                    <div class="h4 mb-1 font-weight-bold"><t t-esc="state.metrics_data.quotation_count"/></div>
+                                    <div class="small font-weight-bold text-primary"><t t-esc="state.metrics_data.quotation_amount"/></div>
+                                </div>
+                            </div>
+                            <!-- Sale Orders -->
+                            <div class="col-lg col-md-4 col-sm-12 mb-3 px-1">
+                                <div class="sla-card p-3 shadow-sm h-100 text-center o_dashboard_action sla-card-purple" 
+                                     style="cursor: pointer;"
+                                     data-model="sale.order" data-name="Sale Orders" data-domain="[[&quot;state&quot;, &quot;in&quot;, [&quot;sale&quot;, &quot;done&quot;]], [&quot;partner_id.user_id&quot;, &quot;=&quot;, &quot;USER_ID&quot;]]"
+                                     t-on-click="_onDashboardActionClick">
+                                    <div class="small text-muted text-uppercase font-weight-bold mb-1">Sale Orders</div>
+                                    <div class="h4 mb-1 font-weight-bold"><t t-esc="state.metrics_data.sale_count"/></div>
+                                    <div class="small font-weight-bold text-primary"><t t-esc="state.metrics_data.sale_amount"/></div>
+                                </div>
+                            </div>
+                            <!-- Paid Invoices -->
+                            <div class="col-lg col-md-4 col-sm-12 mb-3 px-1">
+                                <div class="sla-card p-3 shadow-sm h-100 text-center o_dashboard_action sla-card-green" 
+                                     style="cursor: pointer;"
+                                     data-model="account.move" data-name="Paid Invoices" data-domain="[[&quot;move_type&quot;, &quot;=&quot;, &quot;out_invoice&quot;], [&quot;state&quot;, &quot;=&quot;, &quot;posted&quot;], [&quot;payment_state&quot;, &quot;=&quot;, &quot;paid&quot;], [&quot;partner_id.user_id&quot;, &quot;=&quot;, &quot;USER_ID&quot;]]"
+                                     t-on-click="_onDashboardActionClick">
+                                    <div class="small text-muted text-uppercase font-weight-bold mb-1">Paid Invoices</div>
+                                    <div class="h4 mb-1 font-weight-bold"><t t-esc="state.metrics_data.paid_invoice_count"/></div>
+                                    <div class="small font-weight-bold text-success"><t t-esc="state.metrics_data.paid_invoice_amount"/></div>
+                                </div>
+                            </div>
+                            <!-- Unpaid Invoices -->
+                            <div class="col-lg col-md-4 col-sm-12 mb-3 px-1">
+                                <div class="sla-card p-3 shadow-sm h-100 text-center o_dashboard_action sla-card-red" 
+                                     style="cursor: pointer;"
+                                     data-model="account.move" data-name="Unpaid Invoices" data-domain="[[&quot;move_type&quot;, &quot;=&quot;, &quot;out_invoice&quot;], [&quot;state&quot;, &quot;=&quot;, &quot;posted&quot;], [&quot;payment_state&quot;, &quot;!=&quot;, &quot;paid&quot;], [&quot;partner_id.user_id&quot;, &quot;=&quot;, &quot;USER_ID&quot;]]"
+                                     t-on-click="_onDashboardActionClick">
+                                    <div class="small text-muted text-uppercase font-weight-bold mb-1">Unpaid Invoices</div>
+                                    <div class="h4 mb-1 font-weight-bold"><t t-esc="state.metrics_data.unpaid_invoice_count"/></div>
+                                    <div class="small font-weight-bold text-danger"><t t-esc="state.metrics_data.unpaid_invoice_amount"/></div>
+                                </div>
+                            </div>
+                            <!-- Payments -->
+                            <div class="col-lg col-md-4 col-sm-12 mb-3 px-1">
+                                <div class="sla-card p-3 shadow-sm h-100 text-center o_dashboard_action sla-card-cyan" 
+                                     style="cursor: pointer;"
+                                     data-model="account.payment" data-name="Payments" data-domain="[[&quot;state&quot;, &quot;=&quot;, &quot;posted&quot;], [&quot;partner_id.user_id&quot;, &quot;=&quot;, &quot;USER_ID&quot;]]"
+                                     t-on-click="_onDashboardActionClick">
+                                    <div class="small text-muted text-uppercase font-weight-bold mb-1">Payments</div>
+                                    <div class="h4 mb-1 font-weight-bold"><t t-esc="state.metrics_data.payment_count"/></div>
+                                    <div class="small font-weight-bold text-info"><t t-esc="state.metrics_data.payment_amount"/></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

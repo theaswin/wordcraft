@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_customer_metric_dashboard" model="ir.actions.client">
+        <field name="name">My Performance Dashboard</field>
+        <field name="tag">customer_metric_dashboard_tag</field>
+    </record>
+
+    <menuitem id="menu_customer_metric_dashboard_root" 
+              name="My Dashboards" 
+              sequence="1"/>
+
+    <menuitem id="menu_customer_metric_dashboard" 
+              name="Performance Dashboard" 
+              parent="menu_customer_metric_dashboard_root" 
+              action="action_customer_metric_dashboard" 
+              sequence="1"/>
+</odoo>
