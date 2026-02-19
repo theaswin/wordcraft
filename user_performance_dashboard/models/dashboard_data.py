@@ -70,6 +70,7 @@ class DashboardData(models.AbstractModel):
         amount_due = sum(partners.mapped('payment_amount_due')) if partners else 0.0
         amount_due_count = sum(len(partner.unreconciled_aml_ids) for partner in partners)
 
+        test = 0.00
         return {
             'name': user.name,
             'job_title': user.partner_id.function or 'No Job Title',
@@ -96,5 +97,5 @@ class DashboardData(models.AbstractModel):
             'amount_due': f"SAR {amount_due:,.2f}",
             'amount_due_count': amount_due_count,
             # Backwards compatibility
-            'payment_amount': f"SAR {"-":,.2f}",
+            'payment_amount': f"SAR {test:,.2f}",
         }
