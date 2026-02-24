@@ -152,3 +152,60 @@
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
     }
 }
+
+// ── Mobile Responsiveness ──────────────────────────────────────────
+@media (max-width: 767.98px) {
+    .qweb_dashboard {
+        padding: 12px !important;
+    }
+
+    .sla-card {
+        border-radius: 16px !important;
+        margin-top: 6px;
+
+        // Disable hover lift on touch devices
+        &:hover {
+            transform: none !important;
+            box-shadow: none !important;
+        }
+    }
+
+    .user-profile-sidebar {
+        text-align: center !important;
+        padding: 12px !important;
+
+        .profile-avatar {
+            width: 100px !important;
+            height: 100px !important;
+        }
+
+        h1 {
+            font-size: 18px !important;
+        }
+
+        .h5 {
+            font-size: 13px !important;
+        }
+    }
+
+    // Make the top two cards (My Customers + Incentives) full-width
+    .col-md-4,
+    .col-md-8 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    // Bottom metric cards: 2 per row on small phones
+    .col-lg.col-md-4.col-sm-12 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+// ── Extra-small phones (<400 px) ──────────────────────────────────
+@media (max-width: 399.98px) {
+    .col-lg.col-md-4.col-sm-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
