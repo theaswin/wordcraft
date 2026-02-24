@@ -33,6 +33,7 @@ class ResPartner(models.Model):
                 'hide_confirm_button': True,
                 'hide_save_and_post_button': False,
                 'domain_journal_id': [('id', 'not in', not_allowed_journals)],
+                'from_contact':1
             }
         }
 
