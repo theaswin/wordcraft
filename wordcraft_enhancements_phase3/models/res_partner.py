@@ -109,4 +109,12 @@ class ResPartner(models.Model):
             else:
                 Wizard.create(values)
 
+        # 🧹 Cleanup: Remove wizard records for partners with no unreconciled entries
+        stale_wizards = Wizard.search([
+            ('partner_id.unreconciled_aml_ids', '=', False)
+        ])
+        if stale_wizards:
+            print(f"Unlinking {len(stale_wizards)} stale customer due record(s) with no unreconciled entries.")
+            stale_wizards.unlink()
+
         print("Customer due cron completed successfully.")
