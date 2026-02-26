@@ -21,11 +21,5 @@ class AccountAnalyticAccount(models.Model):
         return super().create(vals_list)
     
 
-    def set_others(self):
-        analytics = self.env['account.analytic.account'].search([])
-
-        for rec in analytics:
-            if rec.partner_id and not rec.user_id:
-                rec.user_id = rec.partner_id.user_id.id or False
 
 
