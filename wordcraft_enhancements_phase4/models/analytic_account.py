@@ -10,9 +10,9 @@ class AccountAnalyticAccount(models.Model):
         string='Salesperson',
         help='The user responsible for this analytic account.'
     )
-    credit_store = fields.Float(string='Credit(Sortable)',store=True,compute='_compute_credit_debit_balance')
-    debit_store = fields.Float(string='Debit(Sortable)',store=True,compute='_compute_credit_debit_balance')
-    balance_store = fields.Float(string='Balance(Sortable)',store=True,compute='_compute_credit_debit_balance')
+    credit_store = fields.Float(string='Credit(Sortable)',store=True,compute='_compute_debit_credit_balance')
+    debit_store = fields.Float(string='Debit(Sortable)',store=True,compute='_compute_debit_credit_balance')
+    balance_store = fields.Float(string='Balance(Sortable)',store=True,compute='_compute_debit_credit_balance')
 
 
 
